@@ -1,17 +1,17 @@
 Name:           percona-tokumxse-tools
-Version:        
+Version:        1.0
 Release:        1%{?dist}
-Summary:        
+Summary:        MongoDB Tools
 
-License:        
-URL:            
-Source0:        
+License:        Apache License v2.0
+URL:            https://www.percona.com/software/percona-tokumx
+Source0:        @@SOURCE_TARBALL@@
 
-BuildRequires:  
-Requires:       
+BuildRequires:  golang
+# Requires:       
 
 %description
-
+This package contains various MongoDB tools compiled for Percona TokuMX SE
 
 %prep
 %setup -q
@@ -33,3 +33,5 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Thu May 21 2015 Alexey Bychko <alexey.bychko@percona.com>
+- Initial RPM release for MongoDB Tools, packaged for Percona TokuMX SE
