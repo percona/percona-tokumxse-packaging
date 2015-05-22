@@ -33,7 +33,7 @@ install -m 755 -d $RPM_BUILD_ROOT/%{_bindir}
 
 for _src in bsondump mongostat mongofiles mongoexport mongoimport mongorestore mongodump mongotop mongooplog; do
   echo "Building ${_src}..."
-  go build -a -x -o "$RPM_BUILD_ROOT/%{_bindir}/${_src}}" -tags "${TOOLS_TAGS}" "$i/main/${_src}}.go"
+  go build -a -x -o "$RPM_BUILD_ROOT/%{_bindir}/${_src}}" -tags "${TOOLS_TAGS}" "$i/main/${_src}.go"
 done
 
 %files
