@@ -38,7 +38,7 @@ for _binary in bsondump mongostat mongofiles mongoexport mongoimport mongorestor
 done
 
 %files
-/usr/bin/*
+%{_bindir}/*
 
 %doc
 

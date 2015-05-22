@@ -9,7 +9,7 @@ URL:            https://www.percona.com/software/percona-tokumx
 Source0:        @@SOURCE_TARBALL@@
 BuildRoot:      /var/tmp/%{name}-%{version}-%{release}
 
-BuildRequires: gcc, make, cmake, gcc-c++, scons
+BuildRequires: zlib-devel, gcc, make, cmake, gcc-c++, scons, openssl-devel
 
 # Requires:       
 
@@ -20,15 +20,36 @@ This package contains high-performance MongoDB replacement from Percona - TokuMX
 
 %setup -q
 
-
 %build
-rm -rf $RPM_BUILD_ROOT
 
+mkdir -p $RPM_BUILD_DIR/%{name}-%{version}/src/third_party/ft-index/ft-build
+cd $RPM_BUILD_DIR/%{name}-%{version}/src/third_party/ft-index/ft-build
+cmake -DCMAKE_BUILD_TYPE=Release -DUSE_VALGRIND=OFF -DTOKU_DEBUG_PARANOID=OFF -DBUILD_TESTING=OFF -DCMAKE_INSTALL_PREFIX=$PWD/install ..
+make %{?_smp_mflags} install
+
+# Move the installed fractal tree to appropriate place and remove source dir
+mv $PWD/install $RPM_BUILD_DIR/%{name}-%{version}/src/third_party/tokuft
+rm -rf $RPM_BUILD_DIR/%{name}-%{version}/src/third_party/ft-index
+#
+# Build MXSE with SCons
+
+cd $RPM_BUILD_DIR/%{name}-%{version}
+
+export MXSE_TARGETS="mongod mongos mongo"
+
+scons --release --ssl --opt=on %{?_smp_mflags} CPPPATH=$PWD/src/third_party/tokuft/include \
+LIBPATH=$PWD/src/third_party/tokuft/lib --tokuft --allocator=jemalloc $MXSE_TARGETS
+
+%install
+rm -rf $RPM_BUILD_ROOT
 install -m 755 -d $RPM_BUILD_ROOT/%{_bindir}
 
+for target in "${MXSE_TARGETS}"; do
+  install -m 755 $target $RPM_BUILD_ROOT/%{_bindir}/
+done
 
 %files
-/usr/bin/*
+%{_bindir}/*
 
 %doc
 
