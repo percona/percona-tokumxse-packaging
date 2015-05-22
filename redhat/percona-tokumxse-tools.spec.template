@@ -1,5 +1,5 @@
 Name:           percona-tokumxse-tools
-Version:        1.0
+Version:        @@VERSION@@
 Release:        1%{?dist}
 Summary:        MongoDB Tools
 Group:          Applications/Databases
@@ -7,6 +7,8 @@ Group:          Applications/Databases
 License:        Apache License v2.0
 URL:            https://www.percona.com/software/percona-tokumx
 Source0:        @@SOURCE_TARBALL@@
+
+%define         TOOLS_TAGS %{nil}
 
 %if 0%{?rhel} == 7
 BuildRequires:  golang
@@ -22,20 +24,25 @@ This package contains various MongoDB tools compiled for Percona TokuMX SE
 
 
 %build
-%configure
-make %{?_smp_mflags}
-
-
-%install
 rm -rf $RPM_BUILD_ROOT
-%make_install
 
+rm -rf vendor/pkg
+. ./set_gopath.sh
+
+install -m 755 -d $RPM_BUILD_ROOT/%{_bindir}
+
+for _src in bsondump mongostat mongofiles mongoexport mongoimport mongorestore mongodump mongotop mongooplog; do
+  echo "Building ${_src}..."
+  go build -a -x -o "$RPM_BUILD_ROOT/%{_bindir}/${_src}}" -tags "${TOOLS_TAGS}" "$i/main/${_src}}.go"
+done
 
 %files
+/usr/bin/*
+
 %doc
 
 
 
 %changelog
-* Thu May 21 2015 Alexey Bychko <alexey.bychko@percona.com>
+* Thu May 21 2015 Alexey Bychko <alexey.bychko@percona.com> @@VERSION@@
 - Initial RPM release for MongoDB Tools, packaged for Percona TokuMX SE
