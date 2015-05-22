@@ -1,6 +1,6 @@
 Name:           percona-tokumxse-tools
 Version:        @@VERSION@@
-Release:        1%{?dist}
+Release:        @@RELEASE@@%{?dist}
 Summary:        MongoDB Tools
 Group:          Applications/Databases
 
