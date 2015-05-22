@@ -44,9 +44,9 @@ LIBPATH=$PWD/src/third_party/tokuft/lib --tokuft --allocator=jemalloc $MXSE_TARG
 rm -rf $RPM_BUILD_ROOT
 install -m 755 -d $RPM_BUILD_ROOT/%{_bindir}
 
-for target in "${MXSE_TARGETS}"; do
-  install -m 755 $target $RPM_BUILD_ROOT/%{_bindir}/
-done
+install -m 755 mongo $RPM_BUILD_ROOT/%{_bindir}/
+install -m 755 mongod $RPM_BUILD_ROOT/%{_bindir}/
+install -m 755 mongos $RPM_BUILD_ROOT/%{_bindir}/
 
 %files
 %{_bindir}/*
