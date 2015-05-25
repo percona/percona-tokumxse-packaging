@@ -58,13 +58,14 @@ install -m 750 -d %{buildroot}/%{_sharedstatedir}/mongo
 install -m 750 -d %{buildroot}/var/run/mongodb
 install -m 750 -d %{buildroot}/%{_sysconfdir}/sysconfig
 #
-install -m 644 ${SOURCE1} %{buildroot}/%{_sysconfdir}
+install -m 644 ${SOURCE1} %{buildroot}/%{_sysconfdir}/mongod.conf
 #
 %if 0%{rhel} == 7
-    install -m 644 ${SOURCE2} %{buildroot}/usr/lib/systemd/system/
+    install -m 755 -d %{buildroot}/usr/lib/systemd/system
+    install -m 644 ${SOURCE2} %{buildroot}/usr/lib/systemd/system/mongod
 %endif
 #
-install -m 644 ${SOURCE3} %{buildroot}/%{_sysconfdir}
+install -m 644 ${SOURCE3} %{buildroot}/%{_sysconfdir}/sysconfig/mongod
 #
 install -m 755 mongo %{buildroot}/%{_bindir}/
 install -m 755 mongod %{buildroot}/%{_sbindir}/
