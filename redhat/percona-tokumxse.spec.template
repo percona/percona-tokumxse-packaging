@@ -53,7 +53,6 @@ install -m 755 -d %{buildroot}/%{_bindir}
 install -m 755 -d %{buildroot}/%{_sbindir}
 install -m 755 -d %{buildroot}/%{_sysconfdir}
 install -m 750 -d %{buildroot}/var/log/mongodb
-touch             %{buildroot}/var/log/mongodb/mongo.log
 install -m 750 -d %{buildroot}/%{_sharedstatedir}/mongo
 install -m 750 -d %{buildroot}/var/run/mongodb
 install -m 750 -d %{buildroot}/%{_sysconfdir}/sysconfig
@@ -62,7 +61,7 @@ install -m 644 %{SOURCE1} %{buildroot}/%{_sysconfdir}/mongod.conf
 #
 %if 0%{rhel} == 7
     install -m 755 -d %{buildroot}/usr/lib/systemd/system
-    install -m 644 %{SOURCE2} %{buildroot}/usr/lib/systemd/system/mongod
+    install -m 644 %{SOURCE2} %{buildroot}/usr/lib/systemd/system/mongod.service
 %endif
 #
 install -m 644 %{SOURCE3} %{buildroot}/%{_sysconfdir}/sysconfig/mongod
@@ -77,6 +76,10 @@ install -m 755 mongos %{buildroot}/%{_bindir}/
 %{_bindir}/mongo
 %{_bindir}/mongos
 %{_sbindir}/mongod
+
+%if 0%{rhel} == 7
+/usr/lib/systemd/system/mongod.service
+%endif
 
 %attr(0755,mongod,mongod) %dir %{_sharedstatedir}/mongo
 %attr(0755,mongod,mongod) %dir /var/log/mongodb
@@ -100,8 +103,8 @@ fi
 
 %post
 %if 0%{rhel} == 7
-if [ $(systemctl is-enabled ${SOURCE2}) = disabled ]; then
-    systemctl enable ${SOURCE2}
+if [ $(systemctl is-enabled %{SOURCE2}) = disabled ]; then
+    systemctl enable %{SOURCE2}
 fi
 %endif
 
