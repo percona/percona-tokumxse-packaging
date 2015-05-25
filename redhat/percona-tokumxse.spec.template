@@ -103,8 +103,11 @@ fi
 
 %post
 %if 0%{rhel} == 7
-if [ $(systemctl is-enabled %{SOURCE2}) = disabled ]; then
-    systemctl enable %{SOURCE2}
+if [ $(systemctl is-enabled mongod.service) == disabled ]; then
+    systemctl enable mongod.service
+    if [ $1 == 0 ]; then
+        systemctl start mongod.service
+    fi
 fi
 %endif
 
