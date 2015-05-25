@@ -53,18 +53,18 @@ install -m 755 -d %{buildroot}/%{_bindir}
 install -m 755 -d %{buildroot}/%{_sbindir}
 install -m 755 -d %{buildroot}/%{_sysconfdir}
 install -m 750 -d %{buildroot}/var/log/mongodb
-touch %{buildroot}/var/log/mongodb/mongo.log
-install -m 750 -d %{_sharedstatedir}/mongo
-install -m 750 -d /var/run/mongodb
-install -m 750 -d %{_sysconfdir}/sysconfig
+touch             %{buildroot}/var/log/mongodb/mongo.log
+install -m 750 -d %{buildroot}/%{_sharedstatedir}/mongo
+install -m 750 -d %{buildroot}/var/run/mongodb
+install -m 750 -d %{buildroot}/%{_sysconfdir}/sysconfig
 #
-install -m 644 ${SOURCE1} %{_sysconfdir}
+install -m 644 ${SOURCE1} %{buildroot}/%{_sysconfdir}
 #
 %if 0%{rhel} == 7
-    install -m 644 ${SOURCE2} /usr/lib/systemd/system/
+    install -m 644 ${SOURCE2} %{buildroot}/usr/lib/systemd/system/
 %endif
 #
-install -m 644 ${SOURCE3} %{_sysconfdir}
+install -m 644 ${SOURCE3} %{buildroot}/%{_sysconfdir}
 #
 install -m 755 mongo %{buildroot}/%{_bindir}/
 install -m 755 mongod %{buildroot}/%{_sbindir}/
