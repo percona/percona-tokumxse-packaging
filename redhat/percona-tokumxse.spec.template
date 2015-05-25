@@ -53,6 +53,7 @@ install -m 755 -d %{buildroot}/%{_bindir}
 install -m 755 -d %{buildroot}/%{_sbindir}
 install -m 755 -d %{buildroot}/%{_sysconfdir}
 install -m 750 -d %{buildroot}/var/log/mongodb
+touch %{buildroot}/var/log/mongodb/mongo.log
 install -m 750 -d %{_sharedstatedir}/mongo
 install -m 750 -d /var/run/mongodb
 install -m 750 -d %{_sysconfdir}/sysconfig
@@ -82,6 +83,7 @@ install -m 755 mongos %{buildroot}/%{_bindir}/
 
 %config(noreplace) %{_sysconfdir}/mongod.conf
 %config(noreplace) %{_sysconfdir}/sysconfig/mongod
+%attr(0640,mongod,mongod) %ghost /var/log/mongodb/mongod.log
 
 %doc
 
