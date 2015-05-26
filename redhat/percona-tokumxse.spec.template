@@ -92,9 +92,11 @@ install -m 755 mongos %{buildroot}/%{_bindir}/
 %doc
 
 %pre
-if ! /usr/bin/id -g mongod > /dev/null 2>&1; then
+if [ $1 == 1 ]; then
+  if ! /usr/bin/id -g mongod > /dev/null 2>&1; then
     /usr/sbin/groupadd -r mongod
     /usr/sbin/useradd -M -r -g mongod -d /var/lib/mongo -s /bin/false -c mongod mongod > /dev/null 2>&1
+  fi
 fi
 #
 
@@ -102,12 +104,32 @@ fi
 %if 0%{rhel} == 7
 if [ $(systemctl is-enabled mongod.service) == disabled ]; then
     systemctl enable mongod.service
-    if [ $1 == 0 ]; then
-        systemctl start mongod.service
-    fi
+fi
+#
+if [ $1 == 0 ]; then
+  systemctl start mongod.service
 fi
 %endif
 
+%preun
+%if 0%{rhel} == 7
+if [ $(systemctl is-enabled mongod.service) == enabled ]; then
+    systemctl disable mongod.service
+fi
+#
+if [ $1 == 0 ]; then
+  systemctl stop mongod.service
+fi
+%endif
+
+%postun
+if [ $1 == 0 ]; then
+  if /usr/bin/id -g mongod > /dev/null 2>&1; then
+    /usr/sbin/useradd -M -r -g mongod -d /var/lib/mongo -s /bin/false -c mongod mongod > /dev/null 2>&1
+    /usr/sbin/groupdel mongod
+  fi
+fi
+#
 %changelog
 * Fri May 22 2015 Alexey Bychko <alexey.bychko@percona.com> @@VERSION@@
 - Initial RPM release for TokuMX SE packaged for Percona
