@@ -1,0 +1,55 @@
+#!/usr/bin/make -f
+#
+export DH_VERBOSE=1
+export DEB_BUILD_HARDENING=1
+export NJOBS=$(shell grep -c processor /proc/cpuinfo)
+export MXSE_TARGETS=mongod mongos mongo
+export TOKUMXSRC=$(shell pwd)
+#
+clean:
+	rm -fr $(TOKUMXSRC)/src/third_party/ft-index/ft-build
+	rm -fr $(TOKUMXSRC)/src/third_party/tokuft
+	scons -c --release --ssl --opt=on -j$(NJOBS) CPPPATH=$(TOKUMXSRC)/src/third_party/tokuft/include \
+	LIBPATH=$(TOKUMXSRC)/src/third_party/tokuft/lib --tokuft --allocator=jemalloc $(MXSE_TARGETS)
+	rm -fr build
+	find $(TOKUMXSRC) -name '*.pyc' -delete
+		
+ft-index-configure: 
+	mkdir -p $(TOKUMXSRC)/src/third_party/ft-index/ft-build
+	cd $(TOKUMXSRC)/src/third_party/ft-index/ft-build
+	cmake -DCMAKE_BUILD_TYPE=Release -DUSE_VALGRIND=OFF \
+	-DTOKU_DEBUG_PARANOID=OFF -DBUILD_TESTING=OFF \
+	-DCMAKE_INSTALL_PREFIX=$(TOKUMXSRC)/src/third_party/ft-index/ft-build/install $(TOKUMXSRC)/src/third_party/ft-index
+
+ft-index: ft-index-configure
+	cd $(TOKUMXSRC)/src/third_party/ft-index/ft-build
+	make -j$(NJOBS) install 
+	mv $(TOKUMXSRC)/src/third_party/ft-index/ft-build/install $(TOKUMXSRC)/src/third_party/tokuft
+	rm -rfv $(TOKUMXSRC)/src/third_party/ft-index/ft-build
+	
+tokumxse: ft-index
+	scons --release --ssl --opt=on -j$(NJOBS) CPPPATH=$(TOKUMXSRC)/src/third_party/tokuft/include \
+	LIBPATH=$(TOKUMXSRC)/src/third_party/tokuft/lib --tokuft --allocator=jemalloc $(MXSE_TARGETS)
+
+build: tokumxse
+	dh_testdir
+	dh_testroot
+	dh_prep
+	dh_installdirs
+	cp -av mongos debian/percona-tokumxse/usr/bin
+	cp -av mongo debian/percona-tokumxse/usr/bin
+	cp -av mongod debian/percona-tokumxse/usr/sbin
+	cp -av debian/mongod.upstart debian/percona-tokumxse/etc/init/mongod.conf
+	cp -av debian/mongod.conf debian/percona-tokumxse/etc/mongod.conf
+	cp -av debian/mongod.default debian/percona-tokumxse/etc/default/mongod
+
+binary: 
+	dh_strip -a --dbg-package=percona-tokumxse-dbg
+	dh_lintian
+	dh_fixperms -a
+	dh_installdeb -a
+	dh_shlibdeps -a
+	dh_gencontrol -a
+	dh_md5sums -a
+	dh_builddeb -a
+

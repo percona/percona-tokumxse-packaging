@@ -1,0 +1,5 @@
+percona-tokumxse (1.0.0-rc5) UNRELEASED; urgency=medium
+
+  * Initial release. (Closes: #BLD-263)
+
+ -- Alexey Bychko <alexey.bychko@percona.com>  Tue, 26 May 2015 13:32:57 +0600

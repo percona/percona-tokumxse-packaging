@@ -1,0 +1,5 @@
+usr/bin/mongo
+usr/bin/mongos
+usr/sbin/mongod
+etc/init/mongod.conf
+

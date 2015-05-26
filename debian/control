@@ -1,0 +1,23 @@
+Source: percona-tokumxse
+Maintainer: Alexey Bychko <alexey.bychko@percona.com>
+Section: database
+Priority: extra
+Standards-Version: 3.9.2
+Build-Depends: debhelper (>= 9)
+
+Package: percona-tokumxse
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}
+Description: High-performance MongoDB fork from Percona
+ TokuMXSE is a drop-in high-performance replacement for MongoDB from Percona
+
+Package: percona-tokumxse-dbg
+Architecture: any
+Section: debug
+Depends: percona-tokumxse (= ${binary:Version}), ${misc:Depends}
+Description: Debugging package for Percona TokuMXSE
+ TokuMXSE is a drop-in high-performance replacement for MongoDB from Percona
+
+
+
+ 
