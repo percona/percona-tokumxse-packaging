@@ -29,7 +29,7 @@ ft-index: ft-index-configure
 	
 tokumxse: ft-index
 	scons --release --ssl --opt=on -j$(NJOBS) CPPPATH=$(TOKUMXSRC)/src/third_party/tokuft/include \
-	LIBPATH=$(TOKUMXSRC)/src/third_party/tokuft/lib --tokuft --allocator=jemalloc $(MXSE_TARGETS)
+	LIBPATH="$(LD_LIBRARY_PATH):$(TOKUMXSRC)/src/third_party/tokuft/lib" --tokuft --allocator=jemalloc $(MXSE_TARGETS)
 
 build: tokumxse
 	dh_testdir
