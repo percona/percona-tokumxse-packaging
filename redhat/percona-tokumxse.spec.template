@@ -9,7 +9,7 @@ URL:            https://www.percona.com/software/percona-tokumx
 Source0:        @@SOURCE_TARBALL@@
 Source1:        mongod.conf
 Source2:        mongod.service
-Source3:        mongod.sysconfig
+Source3:        mongod.default
 BuildRoot:      /var/tmp/%{name}-%{version}-%{release}
 
 BuildRequires: zlib-devel, gcc, make, cmake, gcc-c++, scons, openssl-devel
