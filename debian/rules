@@ -39,6 +39,7 @@ build: tokumxse
 	cp -av mongos debian/percona-tokumxse/usr/bin
 	cp -av mongo debian/percona-tokumxse/usr/bin
 	cp -av mongod debian/percona-tokumxse/usr/sbin
+	cp -av debian/thp-disable.sh debian/percona-tokumxse/usr/bin
 	cp -av debian/mongod.upstart debian/percona-tokumxse/etc/init/mongod.conf
 	cp -av debian/mongod.conf debian/percona-tokumxse/etc/mongod.conf
 	cp -av debian/mongod.default debian/percona-tokumxse/etc/default/mongod

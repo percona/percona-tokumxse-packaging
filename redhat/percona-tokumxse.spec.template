@@ -10,6 +10,7 @@ Source0:        @@SOURCE_TARBALL@@
 Source1:        mongod.conf
 Source2:        mongod.service
 Source3:        mongod.default
+Source4:        thp-disable.sh
 BuildRoot:      /var/tmp/%{name}-%{version}-%{release}
 
 BuildRequires: zlib-devel, gcc, make, cmake, gcc-c++, scons, openssl-devel
@@ -65,6 +66,7 @@ install -m 644 %{SOURCE1} %{buildroot}/%{_sysconfdir}/mongod.conf
 %endif
 #
 install -m 644 %{SOURCE3} %{buildroot}/%{_sysconfdir}/sysconfig/mongod
+install -m 755 %{SOURCE4} %{buildroot}/%{_bindir}/
 #
 install -m 755 mongo %{buildroot}/%{_bindir}/
 install -m 755 mongod %{buildroot}/%{_sbindir}/
@@ -76,6 +78,7 @@ install -m 755 mongos %{buildroot}/%{_bindir}/
 %{_bindir}/mongo
 %{_bindir}/mongos
 %{_sbindir}/mongod
+%{_bindir}/thp-disable.sh
 
 %if 0%{rhel} == 7
 /usr/lib/systemd/system/mongod.service
