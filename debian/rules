@@ -5,6 +5,7 @@ export DEB_BUILD_HARDENING=1
 export NJOBS=$(shell grep -c processor /proc/cpuinfo)
 export MXSE_TARGETS=mongod mongos mongo
 export TOKUMXSRC=$(shell pwd)
+export OLD_LIB_PATH=$(LD_LIBRARY_PATH)
 #
 clean:
 	rm -fr $(TOKUMXSRC)/src/third_party/ft-index/ft-build
@@ -29,9 +30,10 @@ ft-index: ft-index-configure
 	
 tokumxse: ft-index
 	scons --release --ssl --opt=on -j$(NJOBS) CPPPATH=$(TOKUMXSRC)/src/third_party/tokuft/include \
-	LIBPATH="$(LD_LIBRARY_PATH):$(TOKUMXSRC)/src/third_party/tokuft/lib" --tokuft --allocator=jemalloc $(MXSE_TARGETS)
+	LIBPATH=$(TOKUMXSRC)/src/third_party/tokuft/lib --tokuft --allocator=jemalloc $(MXSE_TARGETS)
 
 build: tokumxse
+	export LD_LIBRARY_PATH=$(OLD_LIB_PATH)
 	dh_testdir
 	dh_testroot
 	dh_prep
