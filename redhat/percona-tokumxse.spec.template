@@ -54,9 +54,9 @@ install -m 755 -d %{buildroot}/%{_bindir}
 install -m 755 -d %{buildroot}/%{_sbindir}
 install -m 755 -d %{buildroot}/%{_sysconfdir}
 install -m 750 -d %{buildroot}/var/log/mongodb
-install -m 750 -d %{buildroot}/%{_sharedstatedir}/mongo
+install -m 750 -d %{buildroot}/%{_sharedstatedir}/mongodb
 install -m 750 -d %{buildroot}/var/run/mongodb
-install -m 750 -d %{buildroot}/%{_sysconfdir}/sysconfig
+install -m 755 -d %{buildroot}/%{_sysconfdir}/sysconfig
 #
 install -m 644 %{SOURCE1} %{buildroot}/%{_sysconfdir}/mongod.conf
 #
@@ -84,9 +84,9 @@ install -m 755 mongos %{buildroot}/%{_bindir}/
 /usr/lib/systemd/system/mongod.service
 %endif
 
-%attr(0755,mongod,mongod) %dir %{_sharedstatedir}/mongo
-%attr(0755,mongod,mongod) %dir /var/log/mongodb
-%attr(0755,mongod,mongod) %dir /var/run/mongodb
+%attr(0750,mongod,mongod) %dir %{_sharedstatedir}/mongodb
+%attr(0750,mongod,mongod) %dir /var/log/mongodb
+%attr(0750,mongod,mongod) %dir /var/run/mongodb
 
 %config(noreplace) %{_sysconfdir}/mongod.conf
 %config(noreplace) %{_sysconfdir}/sysconfig/mongod
