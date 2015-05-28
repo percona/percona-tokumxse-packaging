@@ -128,7 +128,7 @@ fi
 %postun
 if [ $1 == 0 ]; then
   if /usr/bin/id -g mongod > /dev/null 2>&1; then
-    /usr/sbin/useradd -M -r -g mongod -d /var/lib/mongo -s /bin/false -c mongod mongod > /dev/null 2>&1
+    /usr/sbin/userdel mongod > /dev/null 2>&1
     /usr/sbin/groupdel mongod
   fi
 fi
