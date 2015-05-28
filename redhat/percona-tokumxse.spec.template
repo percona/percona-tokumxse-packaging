@@ -96,8 +96,8 @@ install -m 755 mongos %{buildroot}/%{_bindir}/
 
 %pre
 if [ $1 == 1 ]; then
-  if ! /usr/bin/id -g mongod > /dev/null 2>&1; then
-    /usr/sbin/groupadd -r mongod
+  if ! getent passwd mongod > /dev/null 2>&1; then
+    /usr/sbin/groupadd --system mongod
     /usr/sbin/useradd -M -r -g mongod -d /var/lib/mongo -s /bin/false -c mongod mongod > /dev/null 2>&1
   fi
 fi
