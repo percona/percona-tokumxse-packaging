@@ -20,15 +20,8 @@ set -e
 
 case "$1" in
     configure)
-  # create a mongodb group and user
-        if ! getent passwd mongod >/dev/null 2>&1; then
-          adduser --system --no-create-home mongod
-          addgroup --system mongod
-          adduser mongod mongod
-        fi
-
-        chown -R mongod:mongod /var/lib/mongodb
-        chown -R mongod:mongod /var/log/mongodb
+      echo " * Please run manually /usr/bin/thp-disable.sh script before the starting TokuMXSE daemon"
+      echo " * To disable Transparent Huge Pages kernel feature"
     ;;
 
     abort-upgrade|abort-remove|abort-deconfigure)

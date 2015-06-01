@@ -22,6 +22,13 @@ BuildRequires: zlib-devel, gcc, make, cmake, gcc-c++, scons, openssl-devel
 %description
 This package contains high-performance MongoDB replacement from Percona - TokuMX SE.
 
+%package tools
+Group:          Applications/Databases
+Summary:        The tools package for TokuMXSE
+
+%description tools
+This package contains various tools from MongoDB project, recompiled for Percona TokuMXSE
+
 %prep
 
 %setup -q -n %{src_dir}
@@ -94,6 +101,17 @@ install -m 755 mongos %{buildroot}/%{_bindir}/
 %config(noreplace) %{_sysconfdir}/sysconfig/mongod
 %attr(0640,mongod,mongod) %ghost /var/log/mongodb/mongod.log
 
+%files tools
+%{_bindir}/bsondump 
+%{_bindir}/mongostat 
+%{_bindir}/mongofiles 
+%{_bindir}/mongoexport 
+%{_bindir}/mongoimport 
+%{_bindir}/mongorestore 
+%{_bindir}/mongodump 
+%{_bindir}/mongotop 
+%{_bindir}/mongooplog
+
 %doc
 
 %pre
@@ -102,6 +120,8 @@ if [ $1 == 1 ]; then
     /usr/sbin/groupadd --system mongod
     /usr/sbin/useradd -M -r -g mongod -d /var/lib/mongo -s /bin/false -c mongod mongod > /dev/null 2>&1
   fi
+  echo " * Please run manually /usr/bin/thp-disable.sh script before the starting TokuMXSE daemon"
+  echo " * To disable Transparent Huge Pages kernel feature"
 fi
 #
 
