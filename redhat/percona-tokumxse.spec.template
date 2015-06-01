@@ -14,7 +14,8 @@ Source2:        mongod.service
 Source3:        mongod.default
 Source4:        thp-disable.sh
 BuildRoot:      /var/tmp/%{name}-%{version}-%{release}
-%global _missing_build_ids_terminate_build 0
+%undefine       _missing_build_ids_terminate_build
+
 
 BuildRequires: zlib-devel, gcc, make, cmake, gcc-c++, scons, openssl-devel
 
