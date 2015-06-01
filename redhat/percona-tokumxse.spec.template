@@ -35,6 +35,14 @@ This package contains various tools from MongoDB project, recompiled for Percona
 
 %build
 
+cd $RPM_BUILD_DIR/mongo-tools
+. ./set_gopath.sh
+rm -rf $RPM_BUILD_DIR/mongo-tools/vendor/pkg
+mkdir -p $RPM_BUILD_DIR/bin
+for tool in  bsondump mongostat mongofiles mongoexport mongoimport mongorestore mongodump mongotop mongooplog; do 
+  go build -a -x -o $RPM_BUILD_DIR/bin/${tool} $RPM_BUILD_DIR//mongo-tools/${tool}/main/${tool}.go; 
+done
+
 mkdir -p $RPM_BUILD_DIR/%{src_dir}/src/third_party/ft-index/ft-build
 cd $RPM_BUILD_DIR/%{src_dir}/src/third_party/ft-index/ft-build
 cmake -DCMAKE_BUILD_TYPE=Release -DUSE_VALGRIND=OFF -DTOKU_DEBUG_PARANOID=OFF -DBUILD_TESTING=OFF -DCMAKE_INSTALL_PREFIX=$PWD/install ..
