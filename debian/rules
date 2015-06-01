@@ -8,6 +8,7 @@ export TOKUMXSRC=$(shell pwd)
 export MONGOTOOLS=bsondump mongostat mongofiles mongoexport mongoimport mongorestore mongodump mongotop mongooplog
 #
 clean:
+	rm -fr $(TOKUMXSRC)/bin
 	rm -fr $(TOKUMXSRC)/src/third_party/ft-index/ft-build
 	rm -fr $(TOKUMXSRC)/src/third_party/tokuft
 	scons -c --release --ssl --opt=on -j$(NJOBS) CPPPATH=$(TOKUMXSRC)/src/third_party/tokuft/include \
