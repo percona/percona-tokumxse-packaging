@@ -17,9 +17,17 @@ pre-start script
   if [ ! -d /var/lib/mongodb ]; then
     mkdir -p /var/lib/mongodb && chown mongod:mongod /var/lib/mongodb
   fi
+  mkdir -p /var/run/mongodb
   touch /var/run/mongodb/mongod.pid
   chown $DAEMONUSER /var/run/mongodb/mongod.pid
-  #. /usr/bin/thp-disable.sh
+  if [ -f /sys/kernel/mm/transparent_hugepage/enabled ]; then
+   echo never > /sys/kernel/mm/transparent_hugepage/enabled
+  fi
+#
+  if [ -f /sys/kernel/mm/transparent_hugepage/defrag ]; then
+    echo never > /sys/kernel/mm/transparent_hugepage/defrag
+  fi
+#
 end script
 
 start on runlevel [2345]
