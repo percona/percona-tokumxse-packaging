@@ -19,7 +19,7 @@ pre-start script
   fi
   touch /var/run/mongodb/mongod.pid
   chown $DAEMONUSER /var/run/mongodb/mongod.pid
-  /usr/bin/thp-disable.sh
+  . /usr/bin/thp-disable.sh
 end script
 
 start on runlevel [2345]

@@ -5,6 +5,7 @@ export DEB_BUILD_HARDENING=1
 export NJOBS=$(shell grep -c processor /proc/cpuinfo)
 export MXSE_TARGETS=mongod mongos mongo
 export TOKUMXSRC=$(shell pwd)
+export MONGOTOOLS=bsondump mongostat mongofiles mongoexport mongoimport mongorestore mongodump mongotop mongooplog
 #
 clean:
 	rm -fr $(TOKUMXSRC)/src/third_party/ft-index/ft-build
@@ -31,7 +32,14 @@ tokumxse: ft-index
 	scons --release --ssl --opt=on -j$(NJOBS) CPPPATH=$(TOKUMXSRC)/src/third_party/tokuft/include \
 	LIBPATH=$(TOKUMXSRC)/src/third_party/tokuft/lib --tokuft --allocator=jemalloc $(MXSE_TARGETS)
 
-build: tokumxse
+compile-mongo-tools:
+	rm -rf $(TOKUMXSRC)/mongo-tools/vendor/pkg
+	mkdir -p $(TOKUMXSRC)/bin
+	for tool in $(MONGOTOOLS) ; do \
+		go build -a -x -o $(TOKUMXSRC)/bin/$$tool $(TOKUMXSRC)/mongo-tools/$$tool/main/$$tool.go ; \
+	done
+
+build: compile-mongo-tools tokumxse
 	dh_testdir
 	dh_testroot
 	dh_prep
@@ -43,6 +51,7 @@ build: tokumxse
 	cp -av debian/mongod.upstart debian/percona-tokumxse/etc/init/mongod.conf
 	cp -av debian/mongod.conf debian/percona-tokumxse/etc/mongod.conf
 	cp -av debian/mongod.default debian/percona-tokumxse/etc/default/mongod
+	cp -av $(TOKUMXSRC)/bin/* debian/percona-tokumxse/usr/bin
 
 binary: 
 	dh_strip -a --dbg-package=percona-tokumxse-dbg
