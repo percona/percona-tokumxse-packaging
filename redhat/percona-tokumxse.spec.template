@@ -39,7 +39,7 @@ rm -rf $RPM_BUILD_DIR/%{src_dir}/src/third_party/ft-index
 #
 # Build MXSE with SCons
 
-cd $RPM_BUILD_DIR/%{name}-%{version}
+cd $RPM_BUILD_DIR/%{src_dir}
 
 export MXSE_TARGETS="mongod mongos mongo"
 
