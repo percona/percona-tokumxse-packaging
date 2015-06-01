@@ -12,7 +12,7 @@ Description: High-performance MongoDB fork from Percona
  TokuMXSE is a drop-in high-performance replacement for MongoDB from Percona
 
 Package: percona-tokumxse-tools
- Architecture: any
+Architecture: any
 Depends: ${shlibs:Depends}, ${misc:Depends}
 Description: Mongo tools for high-performance MongoDB fork from Percona
  TokuMXSE is a drop-in high-performance replacement for MongoDB from Percona
