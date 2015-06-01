@@ -6,4 +6,4 @@ usr/bin/mongoimport
 usr/bin/mongorestore 
 usr/bin/mongodump 
 usr/bin/mongotop 
-usr/bin/mongooplo
+usr/bin/mongooplog
