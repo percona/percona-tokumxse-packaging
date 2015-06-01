@@ -1,3 +1,5 @@
+%define src_dir @@SRC_DIR@@
+
 Name:           percona-tokumxse
 Version:        @@VERSION@@
 Release:        @@RELEASE@@%{?dist}
@@ -22,18 +24,18 @@ This package contains high-performance MongoDB replacement from Percona - TokuMX
 
 %prep
 
-%setup -q
+%setup -q -n %{src_dir}
 
 %build
 
-mkdir -p $RPM_BUILD_DIR/%{name}-%{version}/src/third_party/ft-index/ft-build
-cd $RPM_BUILD_DIR/%{name}-%{version}/src/third_party/ft-index/ft-build
+mkdir -p $RPM_BUILD_DIR/%{src_dir}/src/third_party/ft-index/ft-build
+cd $RPM_BUILD_DIR/%{src_dir}/src/third_party/ft-index/ft-build
 cmake -DCMAKE_BUILD_TYPE=Release -DUSE_VALGRIND=OFF -DTOKU_DEBUG_PARANOID=OFF -DBUILD_TESTING=OFF -DCMAKE_INSTALL_PREFIX=$PWD/install ..
 make %{?_smp_mflags} install
 
 # Move the installed fractal tree to appropriate place and remove source dir
-mv $PWD/install $RPM_BUILD_DIR/%{name}-%{version}/src/third_party/tokuft
-rm -rf $RPM_BUILD_DIR/%{name}-%{version}/src/third_party/ft-index
+mv $PWD/install $RPM_BUILD_DIR/%{src_dir}/src/third_party/tokuft
+rm -rf $RPM_BUILD_DIR/%{src_dir}/src/third_party/ft-index
 #
 # Build MXSE with SCons
 
