@@ -11,7 +11,3 @@ if ! getent passwd mongod >/dev/null 2>&1; then
     addgroup --system mongod
     adduser mongod mongod
 fi
-
-chown -R mongod:mongod /var/lib/mongodb
-chown -R mongod:mongod /var/log/mongodb
-
