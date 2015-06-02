@@ -2,5 +2,5 @@ usr/bin/mongo
 usr/bin/mongos
 usr/sbin/mongod
 usr/bin/thp-disable.sh
-etc/init/mongod.conf
+etc/init.d/mongod
 etc/default/mongod
