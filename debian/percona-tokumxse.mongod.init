@@ -57,12 +57,17 @@ NAME=mongod
 CONF=/etc/mongod.conf
 PIDFILE=/var/run/mongodb/$NAME.pid
 ENABLE_MONGOD=yes
+DAEMONUSER=${DAEMONUSER:-mongod}
 
 # Include mongodb defaults if available
 if [ -f /etc/default/$NAME ] ; then
 	. /etc/default/$NAME
 fi
 DAEMON_OPTS="${OPTIONS}"
+
+mkdir -p /var/run/mongodb
+chown ${DAEMONUSER} ${PIDFILE}
+
 # Handle NUMA access to CPUs (SERVER-3574)
 # This verifies the existence of numactl as well as testing that the command works
 NUMACTL_ARGS="--interleave=all"
@@ -85,14 +90,13 @@ if test "x$ENABLE_MONGOD" != "xyes"; then
 fi
 
 . /lib/lsb/init-functions
+. /usr/bin/thp-disable.sh
 
 STARTTIME=1
 DIETIME=10                   # Time to wait for the server to die, in seconds
                             # If this value is set too low you might not
                             # let some servers to die gracefully and
                             # 'restart' will not work
-
-DAEMONUSER=${DAEMONUSER:-mongod}
 
 set -e
 
