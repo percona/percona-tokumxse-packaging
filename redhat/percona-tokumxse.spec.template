@@ -13,6 +13,7 @@ Source1:        mongod.conf
 Source2:        mongod.service
 Source3:        mongod.default
 Source4:        thp-disable.sh
+Source5:        mongod.init
 BuildRoot:      /var/tmp/%{name}-%{version}-%{release}
 %undefine       _missing_build_ids_terminate_build
 
@@ -82,10 +83,8 @@ install -m 755 -d %{buildroot}/%{_sysconfdir}/sysconfig
 #
 install -m 644 %{SOURCE1} %{buildroot}/%{_sysconfdir}/mongod.conf
 #
-%if 0%{rhel} == 7
-    install -m 755 -d %{buildroot}/usr/lib/systemd/system
-    install -m 644 %{SOURCE2} %{buildroot}/usr/lib/systemd/system/mongod.service
-%endif
+install -m 755 -d %{buildroot}/etc/rc.d/init.d
+install -m 750 %{SOURCE5} %{buildroot}/etc/rc.d/init.d/mongod
 #
 install -m 644 %{SOURCE3} %{buildroot}/%{_sysconfdir}/sysconfig/mongod
 install -m 755 %{SOURCE4} %{buildroot}/%{_bindir}/
@@ -103,9 +102,7 @@ install -m 755 $RPM_BUILD_DIR/%{src_dir}/bin/* %{buildroot}/%{_bindir}/
 %{_sbindir}/mongod
 %{_bindir}/thp-disable.sh
 
-%if 0%{rhel} == 7
-/usr/lib/systemd/system/mongod.service
-%endif
+/etc/rc.d/init.d/mongod
 
 %attr(0750,mongod,mongod) %dir %{_sharedstatedir}/mongodb
 %attr(0750,mongod,mongod) %dir /var/log/mongodb
@@ -134,32 +131,25 @@ if [ $1 == 1 ]; then
     /usr/sbin/groupadd --system mongod
     /usr/sbin/useradd -M -r -g mongod -d /var/lib/mongo -s /bin/false -c mongod mongod > /dev/null 2>&1
   fi
-  echo " * Please run manually /usr/bin/thp-disable.sh script before the starting TokuMXSE daemon"
-  echo " * To disable Transparent Huge Pages kernel feature"
 fi
 #
 
 %post
-%if 0%{rhel} == 7
-if [ $(systemctl is-enabled mongod.service) == disabled ]; then
-    systemctl enable mongod.service
-fi
+#
+chkconfig mongod on
 #
 if [ $1 == 0 ]; then
-  systemctl start mongod.service
+  service mongod start
 fi
-%endif
 
 %preun
-%if 0%{rhel} == 7
-if [ $(systemctl is-enabled mongod.service) == enabled ]; then
-    systemctl disable mongod.service
-fi
+#
+chkconfig mongod off
 #
 if [ $1 == 0 ]; then
-  systemctl stop mongod.service
+  service mongod stop
 fi
-%endif
+
 
 %postun
 if [ $1 == 0 ]; then
