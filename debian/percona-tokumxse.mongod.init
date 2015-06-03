@@ -66,6 +66,7 @@ fi
 DAEMON_OPTS="${OPTIONS}"
 
 mkdir -p /var/run/mongodb
+touch ${PIDFILE}
 chown ${DAEMONUSER} ${PIDFILE}
 
 # Handle NUMA access to CPUs (SERVER-3574)
