@@ -37,6 +37,9 @@ This package contains various tools from MongoDB project, recompiled for Percona
 
 %build
 
+export CC=${CC:-gcc}
+export CXX=${CXX:-g++}
+
 cd $RPM_BUILD_DIR/%{src_dir}/mongo-tools
 . ./set_gopath.sh
 rm -rf $RPM_BUILD_DIR/%{src_dir}/mongo-tools/vendor/pkg
@@ -60,7 +63,7 @@ cd $RPM_BUILD_DIR/%{src_dir}
 
 export MXSE_TARGETS="mongod mongos mongo"
 
-scons --release --ssl --opt=on %{?_smp_mflags} CPPPATH=$PWD/src/third_party/tokuft/include \
+scons --release --ssl --opt=on --cc=${CC} --cxx=${CXX} %{?_smp_mflags} CPPPATH=$PWD/src/third_party/tokuft/include \
 LIBPATH=$PWD/src/third_party/tokuft/lib --tokuft --allocator=jemalloc $MXSE_TARGETS
 
 %install
