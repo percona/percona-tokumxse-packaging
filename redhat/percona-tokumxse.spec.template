@@ -3,7 +3,7 @@
 Name:           percona-tokumxse
 Version:        @@VERSION@@
 Release:        @@RELEASE@@%{?dist}
-Summary:        High-performance MongoDB replacement from Percona
+Summary:        High-performance MongoDB replacement from Percona (metapackage)
 Group:          Applications/Databases
 
 License:        AGPL
@@ -19,16 +19,52 @@ BuildRoot:      /var/tmp/%{name}-%{version}-%{release}
 
 
 BuildRequires: zlib-devel, gcc, make, cmake, gcc-c++, scons, openssl-devel
-
-# Requires:       
+   
+Requires: percona-tokumxse-mongos = %{version}-%{release}  
+Requires: percona-tokumxse-server = %{version}-%{release}  
+Requires: percona-tokumxse-shell = %{version}-%{release}  
+Requires: percona-tokumxse-tools = %{version}-%{release}    
 
 %description
-This package contains high-performance MongoDB replacement from Percona - TokuMX SE.
+This package contains high-performance MongoDB replacement from Percona - TokuMXSE.
+TokuMXSE is built for scalability, performance and high availability, scaling from single server deployments to large, complex multi-site architectures. By leveraging in-memory computing, TokuMXSE provides high performance for both reads and writes. TokuMXSE's native replication and automated failover enable enterprise-grade reliability and operational flexibility.
+
+TokuMXSE is an open-source database used by companies of all sizes, across all industries and for a wide variety of applications. It is an agile database that allows schemas to change quickly as applications evolve, while still providing the functionality developers expect from traditional databases, such as secondary indexes, a full query language and strict consistency.
+
+TokuMXSE has a rich client ecosystem including hadoop integration, officially supported drivers for 10 programming languages and environments, as well as 40 drivers supported by the user community.
+
+TokuMXSE features:
+* JSON Data Model with Dynamic Schemas
+* Auto-Sharding for Horizontal Scalability
+* Built-In Replication for High Availability
+* Rich Secondary Indexes, including geospatial
+* TTL indexes
+* Text Search
+* Aggregation Framework & Native MapReduce
+
+This metapackage will install the mongo shell, import/export tools, other client utilities, server software, default configuration, and init.d scripts.
+
+%package mongos
+Group:          Applications/Databases
+Summary:        TokuMXSE sharded cluster query router
+%description mongos
+This package contains mongos - the TokuMXSE sharded cluster query router
+
+%package server
+Group:          Applications/Databases
+Summary:        TokuMXSE database server
+%description server
+This package contains the TokuMXSE server software, default configuration files and init.d scripts
+
+%package shell
+Group:          Applications/Databases
+Summary:        TokuMXSE shell client
+%description shell
+This package contains the TokuMXSE shell
 
 %package tools
 Group:          Applications/Databases
 Summary:        The tools package for TokuMXSE
-
 %description tools
 This package contains various tools from MongoDB project, recompiled for Percona TokuMXSE
 
@@ -96,24 +132,29 @@ install -m 755 mongos %{buildroot}/%{_bindir}/
 install -m 755 $RPM_BUILD_DIR/%{src_dir}/bin/* %{buildroot}/%{_bindir}/
 
 %files
-%defattr(-,root,root,-)
 
-%{_bindir}/mongo
+%files mongos
+%defattr(-,root,root,-)
 %{_bindir}/mongos
+
+%files server
+%defattr(-,root,root,-)
 %{_sbindir}/mongod
 %{_bindir}/thp-disable.sh
-
 /etc/rc.d/init.d/mongod
-
 %attr(0750,mongod,mongod) %dir %{_sharedstatedir}/mongodb
 %attr(0750,mongod,mongod) %dir /var/log/mongodb
 %attr(0750,mongod,mongod) %dir /var/run/mongodb
-
 %config(noreplace) %{_sysconfdir}/mongod.conf
 %config(noreplace) %{_sysconfdir}/sysconfig/mongod
 %attr(0640,mongod,mongod) %ghost /var/log/mongodb/mongod.log
 
+%files shell
+%defattr(-,root,root,-)
+%{_bindir}/mongo
+
 %files tools
+%defattr(-,root,root,-)
 %{_bindir}/bsondump 
 %{_bindir}/mongostat 
 %{_bindir}/mongofiles 
@@ -126,7 +167,7 @@ install -m 755 $RPM_BUILD_DIR/%{src_dir}/bin/* %{buildroot}/%{_bindir}/
 
 %doc
 
-%pre
+%pre server
 if [ $1 == 1 ]; then
   if ! getent passwd mongod > /dev/null 2>&1; then
     /usr/sbin/groupadd --system mongod
@@ -135,7 +176,7 @@ if [ $1 == 1 ]; then
 fi
 #
 
-%post
+%post server
 #
 chkconfig mongod on
 #
@@ -143,7 +184,7 @@ if [ $1 == 0 ]; then
   service mongod start
 fi
 
-%preun
+%preun server
 #
 chkconfig mongod off
 #
@@ -152,7 +193,7 @@ if [ $1 == 0 ]; then
 fi
 
 
-%postun
+%postun server
 if [ $1 == 0 ]; then
   if /usr/bin/id -g mongod > /dev/null 2>&1; then
     /usr/sbin/userdel mongod > /dev/null 2>&1
