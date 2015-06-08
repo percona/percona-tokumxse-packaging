@@ -142,12 +142,12 @@ install -m 644 $RPM_BUILD_DIR/%{src_dir}/manpages/* %{buildroot}/%{_mandir}/man1
 %files mongos
 %defattr(-,root,root,-)
 %{_bindir}/mongos
-%{_mandir}/man1/mongos.1
+%{_mandir}/man1/mongos.1.gz
 
 %files server
 %defattr(-,root,root,-)
 %{_sbindir}/mongod
-%{_mandir}/man1/mongod.1
+%{_mandir}/man1/mongod.1.gz
 %{_bindir}/thp-disable.sh
 /etc/rc.d/init.d/mongod
 %attr(0750,mongod,mongod) %dir %{_sharedstatedir}/mongodb
@@ -161,28 +161,28 @@ install -m 644 $RPM_BUILD_DIR/%{src_dir}/manpages/* %{buildroot}/%{_mandir}/man1
 %files shell
 %defattr(-,root,root,-)
 %{_bindir}/mongo
-%{_mandir}/man1/mongo.1
+%{_mandir}/man1/mongo.1.gz
 
 %files tools
 %defattr(-,root,root,-)
 %{_bindir}/bsondump 
-%{_mandir}/man1/bsondump.1
+%{_mandir}/man1/bsondump.1.gz
 %{_bindir}/mongostat
- %{_mandir}/man1/mongostat.1
+ %{_mandir}/man1/mongostat.1.gz
 %{_bindir}/mongofiles 
-%{_mandir}/man1/mongofiles.1 
+%{_mandir}/man1/mongofiles.1.gz
 %{_bindir}/mongoexport 
-%{_mandir}/man1/mongoexport.1 
+%{_mandir}/man1/mongoexport.1.gz 
 %{_bindir}/mongoimport 
-%{_mandir}/man1/mongoimport.1 
+%{_mandir}/man1/mongoimport.1.gz
 %{_bindir}/mongorestore 
-%{_mandir}/man1/mongorestore.1 
+%{_mandir}/man1/mongorestore.1.gz
 %{_bindir}/mongodump 
-%{_mandir}/man1/mongodump.1
+%{_mandir}/man1/mongodump.1.gz
 %{_bindir}/mongotop 
-%{_mandir}/man1/mongotop.1 
+%{_mandir}/man1/mongotop.1.gz
 %{_bindir}/mongooplog
-%{_mandir}/man1/mongooplog.1
+%{_mandir}/man1/mongooplog.1.gz
 
 %pre server
 if [ $1 == 1 ]; then
