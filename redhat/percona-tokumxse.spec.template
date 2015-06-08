@@ -19,6 +19,7 @@ BuildRoot:      /var/tmp/%{name}-%{version}-%{release}
 
 
 BuildRequires: zlib-devel, gcc, make, cmake, gcc-c++, scons, openssl-devel
+BuildRequires: golang
    
 Requires: percona-tokumxse-mongos = %{version}-%{release}  
 Requires: percona-tokumxse-server = %{version}-%{release}  
@@ -113,6 +114,8 @@ rm -rf %{buildroot}
 install -m 755 -d %{buildroot}/%{_bindir}
 install -m 755 -d %{buildroot}/%{_sbindir}
 install -m 755 -d %{buildroot}/%{_sysconfdir}
+install -m 755 -d %{buildroot}/%{_mandir}/man1
+
 install -m 750 -d %{buildroot}/var/log/mongodb
 install -m 750 -d %{buildroot}/%{_sharedstatedir}/mongodb
 install -m 750 -d %{buildroot}/var/run/mongodb
@@ -130,16 +133,19 @@ install -m 755 mongo %{buildroot}/%{_bindir}/
 install -m 755 mongod %{buildroot}/%{_sbindir}/
 install -m 755 mongos %{buildroot}/%{_bindir}/
 install -m 755 $RPM_BUILD_DIR/%{src_dir}/bin/* %{buildroot}/%{_bindir}/
+install -m 644 $RPM_BUILD_DIR/%{src_dir}/manpages %{buildroot}/%{_mandir}/man1/
 
 %files
 
 %files mongos
 %defattr(-,root,root,-)
 %{_bindir}/mongos
+%{_mandir}/man1/mongos.1
 
 %files server
 %defattr(-,root,root,-)
 %{_sbindir}/mongod
+%{_mandir}/man1/mongod.1
 %{_bindir}/thp-disable.sh
 /etc/rc.d/init.d/mongod
 %attr(0750,mongod,mongod) %dir %{_sharedstatedir}/mongodb
@@ -148,24 +154,33 @@ install -m 755 $RPM_BUILD_DIR/%{src_dir}/bin/* %{buildroot}/%{_bindir}/
 %config(noreplace) %{_sysconfdir}/mongod.conf
 %config(noreplace) %{_sysconfdir}/sysconfig/mongod
 %attr(0640,mongod,mongod) %ghost /var/log/mongodb/mongod.log
+%doc GNU-AGPL-3.0 README THIRD-PARTY-NOTICES
 
 %files shell
 %defattr(-,root,root,-)
 %{_bindir}/mongo
+%{_mandir}/man1/mongo.1
 
 %files tools
 %defattr(-,root,root,-)
 %{_bindir}/bsondump 
-%{_bindir}/mongostat 
+%{_mandir}/man1/bsondump.1
+%{_bindir}/mongostat
+ %{_mandir}/man1/mongostat.1
 %{_bindir}/mongofiles 
+%{_mandir}/man1/mongofiles.1 
 %{_bindir}/mongoexport 
+%{_mandir}/man1/mongoexport.1 
 %{_bindir}/mongoimport 
+%{_mandir}/man1/mongoimport.1 
 %{_bindir}/mongorestore 
+%{_mandir}/man1/mongorestore.1 
 %{_bindir}/mongodump 
+%{_mandir}/man1/mongodump.1
 %{_bindir}/mongotop 
+%{_mandir}/man1/mongotop.1 
 %{_bindir}/mongooplog
-
-%doc
+%{_mandir}/man1/mongooplog.1
 
 %pre server
 if [ $1 == 1 ]; then
