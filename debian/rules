@@ -53,6 +53,7 @@ build: compile-mongo-tools tokumxse
 	cp -av $(TOKUMXSRC)/bin/* debian/percona-tokumxse-tools/usr/bin
 	dh_installinit -a --name=mongod
 	dh_installman -a
+	dh_installdocs -a
 
 binary: 
 	dh_strip -a --dbg-package=percona-tokumxse-dbg
