@@ -45,12 +45,11 @@ build: compile-mongo-tools tokumxse
 	dh_testroot
 	dh_prep
 	dh_installdirs
-	cp -av mongos debian/percona-tokumxse/usr/bin
-	cp -av mongo debian/percona-tokumxse/usr/bin
-	cp -av mongod debian/percona-tokumxse/usr/sbin
-	cp -av debian/thp-disable.sh debian/percona-tokumxse/usr/bin
-	cp -av debian/mongod.conf debian/percona-tokumxse/etc/mongod.conf
-	mkdir -p debian/percona-tokumxse-tools/usr/bin
+	cp -av mongos debian/percona-tokumxse-mongos/usr/bin
+	cp -av mongo debian/percona-tokumxse-shell/usr/bin
+	cp -av mongod debian/percona-tokumxse-server/usr/sbin
+	cp -av debian/thp-disable.sh debian/percona-tokumxse-server/usr/bin
+	cp -av debian/mongod.conf debian/percona-tokumxse-server/etc/mongod.conf
 	cp -av $(TOKUMXSRC)/bin/* debian/percona-tokumxse-tools/usr/bin
 	dh_installinit --name=mongod
 
