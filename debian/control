@@ -7,7 +7,7 @@ Build-Depends: debhelper (>= 9)
 
 Package: percona-tokumxse
 Architecture: any
-Depends: ${shlibs:Depends}, ${misc:Depends}
+Depends: ${shlibs:Depends}, ${misc:Depends}, percona-tokumxse-mongos, percona-tokumxse-shell, percona-tokumxse-server, percona-tokumxse-tools
 Description: This metapackage will install the mongo shell, import/export tools, other client utilities, server software, default configuration, and init.d scripts.
  This package contains high-performance MongoDB replacement from Percona - TokuMXSE.
  TokuMXSE is built for scalability, performance and high availability, scaling from single server deployments to large, complex multi-site architectures. 
