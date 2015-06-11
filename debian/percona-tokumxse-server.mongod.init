@@ -55,7 +55,7 @@ NAME=mongod
 # Other configuration options are located in $CONF file. See here for more:
 # http://dochub.mongodb.org/core/configurationoptions
 CONF=/etc/mongod.conf
-PIDFILE=/var/run/mongodb/$NAME.pid
+PIDFILEPATH=/var/run/mongodb/$NAME.pid
 PIDDIR=$(dirname $PIDFILEPATH)
 ENABLE_MONGOD=yes
 MONGO_USER=${MONGO_USER:-mongod}
@@ -125,8 +125,8 @@ running() {
 # (works for all users)
 
     # No pidfile, probably no daemon present
-    [ ! -f "$PIDFILE" ] && return 1
-    pid=`cat $PIDFILE`
+    [ ! -f "$PIDFILEPATH" ] && return 1
+    pid=`cat $PIDFILEPATH`
     running_pid $pid $DAEMON || return 1
     return 0
 }
@@ -151,7 +151,7 @@ start_server() {
             fi
 
             # Start the process using the wrapper
-            start-stop-daemon --background --start --quiet --pidfile $PIDFILE \
+            start-stop-daemon --background --start --quiet --pidfile $PIDFILEPATH \
                         --make-pidfile --chuid $MONGO_USER \
                         --exec $NUMACTL $DAEMON $DAEMON_OPTS
             errcode=$?
@@ -160,7 +160,7 @@ start_server() {
 
 stop_server() {
 # Stop the process using the wrapper
-            start-stop-daemon --stop --quiet --pidfile $PIDFILE \
+            start-stop-daemon --stop --quiet --pidfile $PIDFILEPATH \
                         --retry 300 \
                         --user $MONGO_USER \
                         --exec $DAEMON
@@ -170,7 +170,7 @@ stop_server() {
 
 force_stop() {
 # Force the process to die killing it manually
-	[ ! -e "$PIDFILE" ] && return
+	[ ! -e "$PIDFILEPATH" ] && return
 	if running ; then
 		kill -15 $pid
 	# Is it really dead?
@@ -184,7 +184,7 @@ force_stop() {
 			fi
 		fi
 	fi
-	rm -f $PIDFILE
+	rm -f $PIDFILEPATH
 }
 
 
