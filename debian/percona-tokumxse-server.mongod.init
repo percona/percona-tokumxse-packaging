@@ -28,7 +28,7 @@
 # Default-Start:     2 3 4 5
 # Default-Stop:      0 1 6
 # Short-Description: An object/document-oriented database
-# Description:       MongoDB is a high-performance, open source, schema-free 
+# Description:       TokuMXSE is a high-performance, open source, schema-free 
 #                    document-oriented data store that's easy to deploy, manage
 #                    and use. It's network accessible, written in C++ and offers
 #                    the following features:
@@ -56,8 +56,11 @@ NAME=mongod
 # http://dochub.mongodb.org/core/configurationoptions
 CONF=/etc/mongod.conf
 PIDFILE=/var/run/mongodb/$NAME.pid
+PIDDIR=$(dirname $PIDFILEPATH)
 ENABLE_MONGOD=yes
-DAEMONUSER=${DAEMONUSER:-mongod}
+MONGO_USER=${MONGO_USER:-mongod}
+MONGO_GROUP=${MONGO_GROUP:-mongod}
+
 
 # Include mongodb defaults if available
 if [ -f /etc/default/$NAME ] ; then
@@ -65,9 +68,13 @@ if [ -f /etc/default/$NAME ] ; then
 fi
 DAEMON_OPTS="${OPTIONS}"
 
-mkdir -p /var/run/mongodb
-touch ${PIDFILE}
-chown ${DAEMONUSER} ${PIDFILE}
+# Make sure the default pidfile directory exists
+if [ ! -d $PIDDIR ]; then
+    install -d -m 0755 -o $MONGO_USER -g $MONGO_GROUP $PIDDIR
+fi
+
+touch ${PIDFILEPATH}
+chown ${MONGO_USER} ${PIDFILEPATH}
 
 # Handle NUMA access to CPUs (SERVER-3574)
 # This verifies the existence of numactl as well as testing that the command works
@@ -145,7 +152,7 @@ start_server() {
 
             # Start the process using the wrapper
             start-stop-daemon --background --start --quiet --pidfile $PIDFILE \
-                        --make-pidfile --chuid $DAEMONUSER \
+                        --make-pidfile --chuid $MONGO_USER \
                         --exec $NUMACTL $DAEMON $DAEMON_OPTS
             errcode=$?
 	return $errcode
@@ -155,7 +162,7 @@ stop_server() {
 # Stop the process using the wrapper
             start-stop-daemon --stop --quiet --pidfile $PIDFILE \
                         --retry 300 \
-                        --user $DAEMONUSER \
+                        --user $MONGO_USER \
                         --exec $DAEMON
             errcode=$?
 	return $errcode
