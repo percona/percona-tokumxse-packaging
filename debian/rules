@@ -11,8 +11,8 @@ clean:
 	rm -fr $(TOKUMXSRC)/bin
 	rm -fr $(TOKUMXSRC)/src/third_party/ft-index/ft-build
 	rm -fr $(TOKUMXSRC)/src/third_party/tokuft
-	scons -c --release --ssl --opt=on -j$(NJOBS) CPPPATH=$(TOKUMXSRC)/src/third_party/tokuft/include \
-	LIBPATH=$(TOKUMXSRC)/src/third_party/tokuft/lib --tokuft --allocator=jemalloc $(MXSE_TARGETS)
+	scons -c --variant-dir=percona --release --ssl --opt=on -j$(NJOBS) CPPPATH=$(TOKUMXSRC)/src/third_party/tokuft/include \
+	LIBPATH=$(TOKUMXSRC)/src/third_party/tokuft/lib --tokuft --wiredtiger=on --allocator=jemalloc $(MXSE_TARGETS)
 	rm -fr build
 	find $(TOKUMXSRC) -name '*.pyc' -delete
 		
@@ -30,8 +30,8 @@ ft-index: ft-index-configure
 	rm -rfv $(TOKUMXSRC)/src/third_party/ft-index/ft-build
 	
 tokumxse: ft-index
-	scons --release --ssl --opt=on -j$(NJOBS) CPPPATH=$(TOKUMXSRC)/src/third_party/tokuft/include \
-	LIBPATH=$(TOKUMXSRC)/src/third_party/tokuft/lib --tokuft --allocator=jemalloc $(MXSE_TARGETS)
+	scons --variant-dir=percona --release --ssl --opt=on -j$(NJOBS) CPPPATH=$(TOKUMXSRC)/src/third_party/tokuft/include \
+	LIBPATH=$(TOKUMXSRC)/src/third_party/tokuft/lib --tokuft --wiredtiger=on --allocator=jemalloc $(MXSE_TARGETS)
 
 compile-mongo-tools:
 	rm -rf $(TOKUMXSRC)/mongo-tools/vendor/pkg
