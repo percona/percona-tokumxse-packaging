@@ -31,7 +31,7 @@ ft-index: ft-index-configure
 	
 tokumxse: ft-index
 	scons --variant-dir=percona --release --ssl --opt=on -j$(NJOBS) CPPPATH=$(TOKUMXSRC)/src/third_party/tokuft/include \
-	LIBPATH=$(TOKUMXSRC)/src/third_party/tokuft/lib --tokuft --wiredtiger=on --allocator=jemalloc $(MXSE_TARGETS)
+	LIBPATH=$(TOKUMXSRC)/src/third_party/tokuft/lib --tokuft --wiredtiger --allocator=jemalloc $(MXSE_TARGETS)
 
 compile-mongo-tools:
 	rm -rf $(TOKUMXSRC)/mongo-tools/vendor/pkg
