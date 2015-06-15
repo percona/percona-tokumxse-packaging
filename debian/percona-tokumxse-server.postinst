@@ -20,9 +20,6 @@ set -e
 
 case "$1" in
     configure)
-      echo " * Please run manually /usr/bin/thp-disable.sh script before the starting TokuMXSE daemon"
-      echo " * To disable Transparent Huge Pages kernel feature"
-
       chown -R mongod:mongod /var/lib/mongodb
       chown -R mongod:mongod /var/log/mongodb
     ;;
