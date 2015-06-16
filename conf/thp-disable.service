@@ -1,0 +1,11 @@
+[Unit]
+Description=Helper script for TokuMXse to disable Transparent Huge Pages
+
+[Service]
+User=root
+Group=root
+ExecStart=/usr/bin/thp-disable.sh
+Type=oneshot
+
+[Install]
+WantedBy=mongod.service
