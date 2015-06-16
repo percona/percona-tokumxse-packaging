@@ -24,7 +24,7 @@ if [ -f "$SYSCONFIG" ]; then
     . "$SYSCONFIG"
 fi
 
-PIDFILEPATH=/var/run/mongodb/mongod.pid
+PIDFILEPATH=/var/run/mongod.pid
 PIDDIR=$(dirname $PIDFILEPATH)
 MONGO_USER=mongod
 MONGO_GROUP=mongod

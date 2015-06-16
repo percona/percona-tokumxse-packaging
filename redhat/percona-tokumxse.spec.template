@@ -121,15 +121,14 @@ install -m 755 -d %{buildroot}/%{_mandir}/man1
 
 install -m 750 -d %{buildroot}/var/log/mongodb
 install -m 750 -d %{buildroot}/%{_sharedstatedir}/mongodb
-install -m 750 -d %{buildroot}/var/run/mongodb
 install -m 755 -d %{buildroot}/%{_sysconfdir}/sysconfig
 #
 install -m 644 %{SOURCE1} %{buildroot}/%{_sysconfdir}/mongod.conf
 # startup stuff
 %if 0%{?rhel} >= 7
-  install -m 755 -d %{buildroot}/usr/lib/systemd/system
-  install -m 644 %{SOURCE2} %{buildroot}/usr/lib/systemd/system/mongod.service
-  install -m 644 %{SOURCE6} %{buildroot}/usr/lib/systemd/system/thp-disable.service
+  install -m 755 -d %{buildroot}/%{_unitdir}
+  install -m 644 %{SOURCE2} %{buildroot}/%{_unitdir}/mongod.service
+  install -m 644 %{SOURCE6} %{buildroot}/%{_unitdir}/thp-disable.service
 %else  
   install -m 755 -d %{buildroot}/etc/rc.d/init.d
   install -m 750 %{SOURCE5} %{buildroot}/etc/rc.d/init.d/mongod
@@ -157,14 +156,13 @@ install -m 644 $RPM_BUILD_DIR/%{src_dir}/manpages/* %{buildroot}/%{_mandir}/man1
 %{_mandir}/man1/mongod.1.gz
 %{_bindir}/thp-disable.sh
 %if 0%{?rhel} >= 7
-/usr/lib/systemd/system/mongod.service
-/usr/lib/systemd/system/thp-disable.service
+%{_unitdir}/mongod.service
+%{_unitdir}/thp-disable.service
 %else
 /etc/rc.d/init.d/mongod
 %endif
 %attr(0750,mongod,mongod) %dir %{_sharedstatedir}/mongodb
 %attr(0750,mongod,mongod) %dir /var/log/mongodb
-%attr(0750,mongod,mongod) %dir /var/run/mongodb
 %config(noreplace) %{_sysconfdir}/mongod.conf
 %config(noreplace) %{_sysconfdir}/sysconfig/mongod
 %attr(0640,mongod,mongod) %ghost /var/log/mongodb/mongod.log
@@ -209,6 +207,8 @@ fi
 #
 %if 0%{?rhel} >= 7
 %systemd_post mongod.service
+/usr/bin/systemctl enable mongod.service
+
 %else
 chkconfig mongod on
 #
