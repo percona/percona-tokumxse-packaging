@@ -9,10 +9,9 @@
 # pidfile: /var/run/mongodb/mongod.pid
 
 . /etc/rc.d/init.d/functions
-. /usr/bin/thp-disable.sh
+. /usr/bin/tokumxse-pre-start.sh
 
 # things from mongod.conf get there by mongod reading it
-
 
 # NOTE: if you change any OPTIONS here, you get what you pay for:
 # this script assumes all options are in the config file.

@@ -1,7 +1,7 @@
 [Unit]
 Description=High-performance, schema-free document-oriented database
-After=time-sync.target network.target thp-disable.service
-Requires=thp-disable.service
+After=time-sync.target network.target tokumxse-pre-start.service
+Requires=tokumxse-pre-start.service
 
 [Service]
 User=mongod

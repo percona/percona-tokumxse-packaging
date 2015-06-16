@@ -1,0 +1,11 @@
+[Unit]
+Description=Helper script for TokuMXse
+
+[Service]
+User=root
+Group=root
+ExecStart=/usr/bin/tokumxse-pre-start.sh
+Type=oneshot
+
+[Install]
+WantedBy=mongod.service
