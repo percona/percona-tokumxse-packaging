@@ -14,7 +14,6 @@ Source2:        mongod.service
 Source3:        mongod.default
 Source4:        tokumxse-helper.sh
 Source5:        mongod.init
-Source6:        tokumxse-helper.service
 BuildRoot:      /var/tmp/%{name}-%{version}-%{release}
 %undefine       _missing_build_ids_terminate_build
 
@@ -128,7 +127,6 @@ install -m 644 %{SOURCE1} %{buildroot}/%{_sysconfdir}/mongod.conf
 %if 0%{?rhel} >= 7
   install -m 755 -d %{buildroot}/%{_unitdir}
   install -m 644 %{SOURCE2} %{buildroot}/%{_unitdir}/mongod.service
-  install -m 644 %{SOURCE6} %{buildroot}/%{_unitdir}/tokumxse-helper.service
 %else  
   install -m 755 -d %{buildroot}/etc/rc.d/init.d
   install -m 750 %{SOURCE5} %{buildroot}/etc/rc.d/init.d/mongod
@@ -157,7 +155,6 @@ install -m 644 $RPM_BUILD_DIR/%{src_dir}/manpages/* %{buildroot}/%{_mandir}/man1
 %{_bindir}/tokumxse-helper.sh
 %if 0%{?rhel} >= 7
 %{_unitdir}/mongod.service
-%{_unitdir}/tokumxse-helper.service
 %else
 /etc/rc.d/init.d/mongod
 %endif

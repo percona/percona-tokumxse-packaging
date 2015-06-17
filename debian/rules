@@ -48,14 +48,15 @@ build: compile-mongo-tools tokumxse
 	cp -av mongos debian/percona-tokumxse-mongos/usr/bin
 	cp -av mongo debian/percona-tokumxse-shell/usr/bin
 	cp -av mongod debian/percona-tokumxse-server/usr/sbin
-	cp -av debian/thp-disable.sh debian/percona-tokumxse-server/usr/bin
+	cp -av debian/tokumxse-helper.sh debian/percona-tokumxse-server/usr/bin
 	cp -av debian/mongod.conf debian/percona-tokumxse-server/etc/mongod.conf
 	cp -av $(TOKUMXSRC)/bin/* debian/percona-tokumxse-tools/usr/bin
-	dh_installinit -a --name=mongod
+	dh_systemd_enable --name=mongod
 	dh_installman -a
 	dh_installdocs -a
 
 binary: 
+	dh_systemd_start
 	dh_strip -a --dbg-package=percona-tokumxse-dbg
 	dh_lintian
 	dh_fixperms -a
