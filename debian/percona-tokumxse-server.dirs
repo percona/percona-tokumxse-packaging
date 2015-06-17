@@ -1,6 +1,5 @@
 usr/sbin
 usr/bin
-etc/init.d
 var/lib/mongodb
 var/log/mongodb
 var/run

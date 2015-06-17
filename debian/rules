@@ -52,6 +52,7 @@ build: compile-mongo-tools tokumxse
 	cp -av debian/mongod.conf debian/percona-tokumxse-server/etc/mongod.conf
 	cp -av $(TOKUMXSRC)/bin/* debian/percona-tokumxse-tools/usr/bin
 	dh_systemd_enable --name=mongod
+	dh_installinit -a --name=mongod
 	dh_installman -a
 	dh_installdocs -a
 
