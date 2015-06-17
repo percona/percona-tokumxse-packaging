@@ -128,7 +128,7 @@ install -m 644 %{SOURCE1} %{buildroot}/%{_sysconfdir}/mongod.conf
 %if 0%{?rhel} >= 7
   install -m 755 -d %{buildroot}/%{_unitdir}
   install -m 644 %{SOURCE2} %{buildroot}/%{_unitdir}/mongod.service
-  install -m 644 %{SOURCE6} %{buildroot}/%{_unitdir}/tokumx-helper.service
+  install -m 644 %{SOURCE6} %{buildroot}/%{_unitdir}/tokumxse-helper.service
 %else  
   install -m 755 -d %{buildroot}/etc/rc.d/init.d
   install -m 750 %{SOURCE5} %{buildroot}/etc/rc.d/init.d/mongod
