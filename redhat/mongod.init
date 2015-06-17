@@ -6,10 +6,10 @@
 # description: TokuMXSE is a scalable, document-oriented database.
 # processname: mongod
 # config: /etc/mongod.conf
-# pidfile: /var/run/mongodb/mongod.pid
+# pidfile: /var/run/mongod.pid
 
 . /etc/rc.d/init.d/functions
-. /usr/bin/tokumxse-pre-start.sh
+. /usr/bin/tokumxse-helper.sh
 
 # things from mongod.conf get there by mongod reading it
 

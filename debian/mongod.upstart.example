@@ -17,9 +17,9 @@ pre-start script
   if [ ! -d /var/lib/mongodb ]; then
     mkdir -p /var/lib/mongodb && chown mongod:mongod /var/lib/mongodb
   fi
-  mkdir -p /var/run/mongodb
-  touch /var/run/mongodb/mongod.pid
-  chown $DAEMONUSER /var/run/mongodb/mongod.pid
+  mkdir -p /var/run
+  touch /var/run/mongod.pid
+  chown $DAEMONUSER /var/run/mongod.pid
   if [ -f /sys/kernel/mm/transparent_hugepage/enabled ]; then
    echo never > /sys/kernel/mm/transparent_hugepage/enabled
   fi
@@ -55,7 +55,7 @@ script
   then
     exec start-stop-daemon --start \
         --chuid $DAEMONUSER \
-        --pidfile /var/run/mongodb/mongod.pid \
+        --pidfile /var/run/mongod.pid \
         --make-pidfile \
         --exec $NUMACTL $DAEMON $DAEMON_OPTS
   fi
