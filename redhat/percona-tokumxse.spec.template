@@ -204,40 +204,24 @@ fi
 #
 %if 0%{?rhel} >= 7
 %systemd_post mongod.service
-/usr/bin/systemctl enable mongod.service
-
-%else
-chkconfig mongod on
-#
-if [ $1 == 0 ]; then
-  service mongod start
-fi
 %endif
-
 
 %preun server
 #
 %if 0%{?rhel} >= 7
 %systemd_preun mongod.service
-%else
-chkconfig mongod off
-#
-if [ $1 == 0 ]; then
-  service mongod stop
-fi
 %endif
 
 %postun server
 %if 0%{?rhel} >= 7
 %systemd_postun mongod.service
-%else
+%endif
 if [ $1 == 0 ]; then
   if /usr/bin/id -g mongod > /dev/null 2>&1; then
     /usr/sbin/userdel mongod > /dev/null 2>&1
     /usr/sbin/groupdel mongod > /dev/null 2>&1 || true
   fi
 fi
-%endif
 #
 %changelog
 * Fri May 22 2015 Alexey Bychko <alexey.bychko@percona.com> @@VERSION@@
