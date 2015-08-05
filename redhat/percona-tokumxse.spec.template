@@ -103,7 +103,8 @@ cd $RPM_BUILD_DIR/%{src_dir}
 
 export MXSE_TARGETS="mongod mongos mongo"
 
-scons --variant-dir=percona --release --ssl --opt=on --cc=${CC} --cxx=${CXX} %{?_smp_mflags} \
+# scons --variant-dir=percona --release --ssl --opt=on --cc=${CC} --cxx=${CXX} %{?_smp_mflags} \
+scons --variant-dir=percona --release --ssl --opt=on --cc=${CC} --cxx=${CXX} -j4 \
 CPPPATH=$PWD/src/third_party/tokuft/include LIBPATH=$PWD/src/third_party/tokuft/lib \
 --tokuft --wiredtiger --allocator=jemalloc $MXSE_TARGETS
 
